@@ -288,7 +288,7 @@ errno_t huffCompressFile(const char *infilename, const char *outfilename) {
 	// Read in text
 	FILE *f;
 	if (fopen_s(&f, infilename, "rb")) {
-		printf("Couldn't open output file\n");
+		printf("Couldn't open input file\n");
 		return 1;
 	}
 

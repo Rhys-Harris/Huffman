@@ -5,4 +5,6 @@
 
 errno_t huffDecompress(const char *compText, const char *outfilename);
 
+errno_t huffDecompressFile(const char *infilename, const char *outfilename);
+
 #endif

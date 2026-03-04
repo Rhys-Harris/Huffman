@@ -17,19 +17,7 @@ int main(const int argc, char *argv[]) {
 	printf("FINISHED COMPRESSION\n");
 	printf("\n\n");
 
-	// Read in text just compressed
-	FILE *f;
-	if (fopen_s(&f, "out.huff", "rb")) {
-		printf("Couldn't open output file\n");
-		return 1;
-	}
-	char compText[MAX_CHARS];
-	printf("Read %lli chars\n", fread(compText, sizeof(char), MAX_CHARS, f));
-	fclose(f);
-
-	// printf("%s\n", compText);
-
-	if (huffDecompress(compText, "out.txt")) {
+	if (huffDecompressFile("out.huff", "out.txt")) {
 		printf("Couldn't decompress\n");
 		return 1;
 	}

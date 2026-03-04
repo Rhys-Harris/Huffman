@@ -9,6 +9,8 @@
 
 #define MAX_OUTPUT_CHARS 100000
 
+#define MAX_CHARS 100000
+
 int decompress(const char *inText, char *out, int outLength, ReadNode *table, const int lastByteIndex, const int lastBitIndex) {
 	// Each bit
 	//	Traverse tree
@@ -43,6 +45,25 @@ int decompress(const char *inText, char *out, int outLength, ReadNode *table, co
 	}
 
 	return outLen;
+}
+
+// Compresses using huffman and writes directly to the file
+errno_t huffDecompressFile(const char *infilename, const char *outfilename) {
+	// Read in text
+	FILE *f;
+	if (fopen_s(&f, infilename, "rb")) {
+		printf("Couldn't open input file\n");
+		return 1;
+	}
+
+	char text[MAX_CHARS];
+	memset(text, 0, MAX_CHARS);
+
+	fread(text, sizeof(char), MAX_CHARS, f);
+
+	fclose(f);
+
+	return huffDecompress(text, outfilename);
 }
 
 // Compresses using huffman and writes directly to the file
