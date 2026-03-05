@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "Node16.h"
 
@@ -43,6 +44,11 @@ void fixParents16(Node16 *node) {
 }
 
 bool findPathForSymbol16(Node16 *nodePath, Node16 *node, int *pathLen, short symbol) {
+	if (*pathLen == MAX_NODE_DEPTH) {
+		printf("Ran out of path space\n");
+		return false;
+	}
+
 	// Add this node to the stack
 	nodePath[*pathLen] = *node;
 	++(*pathLen);

@@ -3,11 +3,48 @@
 
 #include "Huff8/Huff.h"
 #include "Huff16/Huff16.h"
+#include "Huff32/Huff32.h"
 
-errno_t testHuff8(const char infilename[]) {
-	printf("== TESTING HUFF 8 ==\n\n");
+typedef errno_t (*compFunc)(const char[], const char[]);
 
-	if (huffCompressFile(infilename, "out.huff")) {
+#define NUM_COMP_METHODS 3
+
+char compGroupNum[NUM_COMP_METHODS][2] = {
+	"08",
+	"16",
+	"32",
+};
+
+compFunc compMethods[NUM_COMP_METHODS]  = {
+	huffCompressFile,
+	huff16CompressFile,
+	huff32CompressFile,
+};
+
+compFunc decompMethods[NUM_COMP_METHODS]  = {
+	huffDecompressFile,
+	huff16DecompressFile,
+	huff32DecompressFile,
+};
+
+// We replace the ?? with the correct num
+char outCompFileName[] = "out.huff??";
+char outDecompFileName[] = "out??.txt";
+
+#define COMP_OUT_MOD_INDEX 8
+#define DECOMP_OUT_MOD_INDEX 3
+
+errno_t testHuffMethod(const char infilename[], const int methodNum) {
+	// Fix output file names
+	const char *name = compGroupNum[methodNum];
+	outCompFileName[COMP_OUT_MOD_INDEX] = name[0];
+	outCompFileName[COMP_OUT_MOD_INDEX+1] = name[1];
+	outDecompFileName[DECOMP_OUT_MOD_INDEX] = name[0];
+	outDecompFileName[DECOMP_OUT_MOD_INDEX+1] = name[1];
+
+	printf("== TESTING HUFF %s ==\n\n", name);
+
+	if (compMethods[methodNum](infilename, outCompFileName)) {
 		printf("Couldn't compress\n");
 		return 1;
 	}
@@ -15,37 +52,14 @@ errno_t testHuff8(const char infilename[]) {
 	printf("FINISHED COMPRESSION\n");
 	printf("\n\n");
 
-	if (huffDecompressFile("out.huff", "out.txt")) {
+	if (decompMethods[methodNum](outCompFileName, outDecompFileName)) {
 		printf("Couldn't decompress\n");
 		return 1;
 	}
 	
 	printf("FINISHED DECOMPRESSION\n");
 
-	printf("== END TESTING HUFF 8 ==\n\n");
-
-	return 0;
-}
-
-errno_t testHuff16(const char infilename[]) {
-	printf("== TESTING HUFF 16 ==\n\n");
-
-	if (huff16CompressFile(infilename, "out.huff16")) {
-		printf("Couldn't compress\n");
-		return 1;
-	}
-
-	printf("FINISHED COMPRESSION\n");
-	printf("\n\n");
-
-	if (huff16DecompressFile("out.huff16", "out16.txt")) {
-		printf("Couldn't decompress\n");
-		return 1;
-	}
-	
-	printf("FINISHED DECOMPRESSION\n");
-
-	printf("== END TESTING HUFF 16 ==\n\n");
+	printf("== END TESTING HUFF %s ==\n\n", name);
 
 	return 0;
 }
@@ -53,14 +67,11 @@ errno_t testHuff16(const char infilename[]) {
 int main(const int argc, char *argv[]) {
 	const char infilename[] = "out.ppm";
 
-	if (testHuff8(infilename)) {
-		printf("Fail on testing huff8\n");
-		return 1;
-	}
-
-	if (testHuff16(infilename)) {
-		printf("Fail on testing huff16\n");
-		return 1;
+	for (int i = 0; i < NUM_COMP_METHODS; ++i) {
+		if (testHuffMethod(infilename, i)) {
+			printf("Fail on testing huff%s\n", compGroupNum[i]);
+			return 1;
+		}
 	}
 
 	return 0;

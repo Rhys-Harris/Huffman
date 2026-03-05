@@ -1,49 +1,49 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "Node.h"
+#include "Node32.h"
 
-void destroyNode(Node *node) {
+void destroyNode32(Node32 *node) {
 	if (node->left != NULL) {
-		destroyNode(node->left);
+		destroyNode32(node->left);
 		free(node->left);
 	}
 
 	if (node->right != NULL) {
-		destroyNode(node->right);
+		destroyNode32(node->right);
 		free(node->right);
 	}
 }
 
-int countNodes(Node *node) {
+int countNode32s(Node32 *node) {
 	int count = 1;
 
 	if (node->left != NULL) {
-		count += countNodes(node->left);
+		count += countNode32s(node->left);
 	}
 
 	if (node->right != NULL) {
-		count += countNodes(node->right);
+		count += countNode32s(node->right);
 	}
 
 	return count;
 }
 
-void fixParents(Node *node) {
+void fixParents32(Node32 *node) {
 	if (node->left != NULL) {
-		fixParents(node->left);
+		fixParents32(node->left);
 		node->left->parent = node;
 		node->left->isRight = false;
 	}
 
 	if (node->right != NULL) {
-		fixParents(node->right);
+		fixParents32(node->right);
 		node->right->parent = node;
 		node->left->isRight = true;
 	}
 }
 
-bool findPathForSymbol(Node *nodePath, Node *node, int *pathLen, char symbol) {
+bool findPathForSymbol32(Node32 *nodePath, Node32 *node, int *pathLen, unsigned int symbol) {
 	if (*pathLen == MAX_NODE_DEPTH) {
 		printf("Ran out of path space\n");
 		return false;
@@ -55,7 +55,7 @@ bool findPathForSymbol(Node *nodePath, Node *node, int *pathLen, char symbol) {
 
 	// Check left
 	if (node->left != NULL) {
-		bool found = findPathForSymbol(nodePath, node->left, pathLen, symbol);
+		bool found = findPathForSymbol32(nodePath, node->left, pathLen, symbol);
 		if (found) {
 			return true;
 		}
@@ -63,7 +63,7 @@ bool findPathForSymbol(Node *nodePath, Node *node, int *pathLen, char symbol) {
 
 	// Check right
 	if (node->right != NULL) {
-		bool found = findPathForSymbol(nodePath, node->right, pathLen, symbol);
+		bool found = findPathForSymbol32(nodePath, node->right, pathLen, symbol);
 		if (found) {
 			return true;
 		}
@@ -81,10 +81,9 @@ bool findPathForSymbol(Node *nodePath, Node *node, int *pathLen, char symbol) {
 	return false;
 }
 
-
-void placeNodeInList(Node *node, WriteNode *nodeList, int numNodes, int *curNodeIndex, int parent) {
+void placeNode32InList(Node32 *node, WriteNode32 *nodeList, int numNodes, int *curNodeIndex, int parent) {
 	// Place this node in the list
-	nodeList[*curNodeIndex] = (WriteNode){node->symbol, parent, node->isRight};
+	nodeList[*curNodeIndex] = (WriteNode32){node->symbol, parent, node->isRight};
 
 	const int thisIndex = *curNodeIndex;
 
@@ -93,7 +92,7 @@ void placeNodeInList(Node *node, WriteNode *nodeList, int numNodes, int *curNode
 		(*curNodeIndex)++;
 
 		// Place left side in
-		placeNodeInList(node->left, nodeList, numNodes, curNodeIndex, thisIndex);
+		placeNode32InList(node->left, nodeList, numNodes, curNodeIndex, thisIndex);
 	}
 
 	if (node->right != NULL) {
@@ -101,6 +100,6 @@ void placeNodeInList(Node *node, WriteNode *nodeList, int numNodes, int *curNode
 		(*curNodeIndex)++;
 
 		// Place right side in
-		placeNodeInList(node->right, nodeList, numNodes, curNodeIndex, thisIndex);
+		placeNode32InList(node->right, nodeList, numNodes, curNodeIndex, thisIndex);
 	}
 }

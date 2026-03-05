@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#include "WriteNode.h"
+#include "./WriteNode.h"
 
 #define MAX_NODES 128
 #define MAX_NODE_DEPTH 20
