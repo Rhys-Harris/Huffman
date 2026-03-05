@@ -28,11 +28,11 @@ compFunc decompMethods[NUM_COMP_METHODS]  = {
 };
 
 // We replace the ?? with the correct num
-char outCompFileName[] = "out.huff??";
-char outDecompFileName[] = "out??.txt";
+char outCompFileName[] = "compoutputs/out.huff??";
+char outDecompFileName[] = "finaloutputs/out??.txt";
 
-#define COMP_OUT_MOD_INDEX 8
-#define DECOMP_OUT_MOD_INDEX 3
+#define COMP_OUT_MOD_INDEX 20
+#define DECOMP_OUT_MOD_INDEX 16
 
 errno_t testHuffMethod(const char infilename[], const int methodNum) {
 	// Fix output file names
@@ -65,7 +65,7 @@ errno_t testHuffMethod(const char infilename[], const int methodNum) {
 }
 
 int main(const int argc, char *argv[]) {
-	const char infilename[] = "out.ppm";
+	const char infilename[] = "inputs/out.ppm";
 
 	for (int i = 0; i < NUM_COMP_METHODS; ++i) {
 		if (testHuffMethod(infilename, i)) {

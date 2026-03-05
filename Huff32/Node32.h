@@ -7,7 +7,7 @@
 
 // NOTE: This max nodes thing is kind of screwy
 #define MAX_NODES 5000
-#define MAX_NODE_DEPTH 10000
+#define MAX_NODE_DEPTH 100
 
 typedef struct Node32 Node32;
 
