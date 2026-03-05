@@ -5,22 +5,13 @@
 
 #include "HuffEntry.h"
 #include "Node.h"
-#include "BufView32.h"
+#include "../BufView32.h"
 
 #include "HuffCompress.h"
 
 #define OUT_TEXT_MAX_SIZE 100000
 
 #define MAX_CHARS 100000
-
-int indexOfSymbolInEntryTable(const char symbol, const HuffEntry *entries, const int numSymbols) {
-	for (int i = 0; i < numSymbols; ++i) {
-		if (entries[i].symbol == symbol) {
-			return i;
-		}
-	}
-	return -1;
-}
 
 // Returns the complete table, giving count for each char
 HuffEntry *getUniqueSymbols(const char *text, int *numSymbols) {
@@ -247,9 +238,9 @@ errno_t writeAllDataToBuffer(WriteNode *nodeList, const int numNodes, CompStream
 
 	// Write metadata
 	printf("Writing metadata\n");
-	writeIntToBuff(numNodes, 0, out);
-	writeIntToBuff(lastByteIndex, 4, out);
-	writeIntToBuff(lastBitIndex, 8, out);
+	writeIntToBuff(numNodes, 0, (unsigned char*)out);
+	writeIntToBuff(lastByteIndex, 4, (unsigned char*)out);
+	writeIntToBuff(lastBitIndex, 8, (unsigned char*)out);
 
 	// Write table
 	printf("Writing table\n");
@@ -261,7 +252,7 @@ errno_t writeAllDataToBuffer(WriteNode *nodeList, const int numNodes, CompStream
 		
 		// 0 -> 3
 		// outView32[buff32Index] = node.parent;
-		writeIntToBuff(node.parent, buffIndex, out);
+		writeIntToBuff(node.parent, buffIndex, (unsigned char*)out);
 
 		// 4
 		out[buffIndex+4] = (char)node.symbol;

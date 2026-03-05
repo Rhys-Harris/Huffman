@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "HuffDecompress.h"
-#include "BufView32.h"
+#include "../BufView32.h"
 #include "ReadNode.h"
 #include "WriteNode.h"
 

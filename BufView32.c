@@ -1,11 +1,11 @@
-void writeIntToBuff(int i, int index, char *buff) {
-	buff[index] = (char)(i>>24);
-	buff[index+1] = (char)(i>>16);
-	buff[index+2] = (char)(i>>8);
-	buff[index+3] = (char)(i);
+void writeIntToBuff(int i, int index, unsigned char *buff) {
+	buff[index] = (unsigned char)(i>>24);
+	buff[index+1] = (unsigned char)(i>>16);
+	buff[index+2] = (unsigned char)(i>>8);
+	buff[index+3] = (unsigned char)(i);
 }
 
-int readIntFromBuff(const int index, const char *buff) {
+int readIntFromBuff(const int index, const unsigned char *buff) {
 	int i = 0;
 
 	i |= ((int)(buff[index])<<24);
